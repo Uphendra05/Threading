@@ -5,12 +5,16 @@
 
 void ExampleFunction()
 {
+	CriticalSection::EnterCS();
 	std::cout << "Thread running..." << std::endl;
+	CriticalSection::LeaveCS();
 }
 
 void ExampleFunction2()
 {
+	CriticalSection::EnterCS();
 	std::cout << "I love hello World" << std::endl;
+	CriticalSection::LeaveCS();
 }
 
 
@@ -31,7 +35,7 @@ int main(int args, char* argc[])
 	
 	
 	    CustomThread<void(*)()> singleThread(ExampleFunction2);
-		HANDLE single = singleThread.StartSingleThread();
+		singleThread.StartSingleThread();
 		
 
 		CustomThread<void(*)()> multipleThreads(ExampleFunction);

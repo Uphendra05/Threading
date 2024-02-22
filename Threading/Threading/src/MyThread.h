@@ -4,6 +4,37 @@
 #include <Windows.h>
 #define WIN32_LEAN_AND_MEAN
 
+
+
+
+CRITICAL_SECTION g_CriticalSection;
+
+namespace CriticalSection
+{
+
+	static void InitCS()
+	{
+		InitializeCriticalSection(&g_CriticalSection);
+
+	}
+	static void EnterCS()
+	{
+		EnterCriticalSection(&g_CriticalSection);
+	}
+	static void LeaveCS()
+	{
+		LeaveCriticalSection(&g_CriticalSection);
+	}
+
+	static void DeleteCS()
+	{
+		DeleteCriticalSection(&g_CriticalSection);
+	}
+
+}
+
+
+
 enum class WaitTypes
 {
 	NONE = 0,
@@ -38,7 +69,8 @@ public:
 	HANDLE StartSingleThread() 
 	{
 
-		
+		CriticalSection::InitCS();
+
 		m_ThreadHandle = CreateThread(
 				NULL,                   // lpThreadAttributes,
 				0,                      // dwStackSize,
@@ -51,8 +83,12 @@ public:
 			{
 				std::cerr << "Thread creation failed!" << std::endl;
 			}
+
 			WaitForSingleObject(m_ThreadHandle, INFINITE);
 			CloseHandle(m_ThreadHandle);
+
+			CriticalSection::DeleteCS();
+
 			return m_ThreadHandle;
 		
 	}
@@ -60,8 +96,8 @@ public:
 
 	HANDLE StartMultipleThreads()
 	{
-
-		const unsigned int noofthreads = 10;
+		CriticalSection::InitCS();
+		const unsigned int noofthreads = 14;
 		HANDLE m_ThreadHandles[noofthreads] = { 0 };
 		DWORD m_ThreadIds[noofthreads] = { 0 };
 
@@ -75,6 +111,7 @@ public:
 							   this,                   // lpParameter,
 							   0,                      // dwCreationFlags,
 							   &(m_ThreadIds[i]));           // lpThreadId
+			
 			if (m_ThreadIds[i] == NULL)
 			{
 				std::cerr << "Thread creation failed!" << std::endl;
@@ -89,6 +126,7 @@ public:
 
 		size_t sizeOfArray = sizeof(m_ThreadHandles) / sizeof(m_ThreadHandles[0]);
 		std::cout << "Size of the array: " << sizeOfArray << std::endl;
+		CriticalSection::DeleteCS();
 
 		return m_ThreadHandles[noofthreads];
 
@@ -135,10 +173,19 @@ private:
 	HANDLE m_ThreadHandle;
 	DWORD m_ThreadId;
 	WaitTypes m_WaitType;
+
+
 	
 
 };
 	
+
+
+
+	
+
+
+
 
 
 
