@@ -28,32 +28,16 @@ int main(int args, char* argc[])
 	//     );
 
 	
+	
+	
 	    CustomThread<void(*)()> singleThread(ExampleFunction2);
-		singleThread.StartSingleThread();
+		HANDLE single = singleThread.StartSingleThread();
+		
 
 		CustomThread<void(*)()> multipleThreads(ExampleFunction);
 		multipleThreads.StartMultipleThreads();
 
-		//threader.Begin(pThread, INFINITE, WaitTypes::SINGLE);
-		//threader.End(pThread);
-
-	
-
-
-	//CustomThread<void(*)()> threader2(ExampleFunction2);
-
-
-	//HANDLE pThread2 = threader2.StartCustomThread();
-
-
-
-	
-
-	//threader2.Begin(pThread2, INFINITE, WaitTypes::SINGLE);
-
-
-
-	//threader2.End(pThread2);
+		
 
 
 

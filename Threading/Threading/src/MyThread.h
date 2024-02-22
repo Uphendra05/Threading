@@ -52,6 +52,7 @@ public:
 				std::cerr << "Thread creation failed!" << std::endl;
 			}
 			WaitForSingleObject(m_ThreadHandle, INFINITE);
+			CloseHandle(m_ThreadHandle);
 			return m_ThreadHandle;
 		
 	}
@@ -79,11 +80,17 @@ public:
 				std::cerr << "Thread creation failed!" << std::endl;
 			}
 
+			
+
 		}
 
 
 		WaitForMultipleObjects(noofthreads, m_ThreadHandles, true, INFINITE);
-		return m_ThreadHandles;
+
+		size_t sizeOfArray = sizeof(m_ThreadHandles) / sizeof(m_ThreadHandles[0]);
+		std::cout << "Size of the array: " << sizeOfArray << std::endl;
+
+		return m_ThreadHandles[noofthreads];
 
 
 	}
@@ -111,10 +118,10 @@ public:
 
 	}
 
-	bool End(const HANDLE myHandle = nullptr)
+	/*bool End(const HANDLE myHandle = nullptr)
 	{
 		return CloseHandle(myHandle);
-	}
+	}*/
 
 	HANDLE GetThreadHandle() const 
 	{
