@@ -28,16 +28,15 @@ int main(int args, char* argc[])
 	//     );
 
 	
-	     CustomThread<void(*)()> threader2(ExampleFunction2);
-	     threader2.StartSingleThread();
+	    CustomThread<void(*)()> singleThread(ExampleFunction2);
+		singleThread.StartSingleThread();
 
-		CustomThread<void(*)()> threader(ExampleFunction);
-		threader.StartMultipleThreads();
+		CustomThread<void(*)()> multipleThreads(ExampleFunction);
+		multipleThreads.StartMultipleThreads();
 
 		//threader.Begin(pThread, INFINITE, WaitTypes::SINGLE);
 		//threader.End(pThread);
 
-		bool sexyBreakpoint = true;
 	
 
 
