@@ -15,6 +15,18 @@ void ExampleFunction2()
 	CriticalSection::EnterCS();
 	std::cout << "I love hello World" << std::endl;
 	CriticalSection::LeaveCS();
+
+
+}
+
+LONG sharedValue = 0;
+
+void IncrementSharedValue() 
+{
+	for (int i = 0; i < 100000; ++i) {
+		// Increment sharedValue atomically
+		InterLock::Exchange(&sharedValue, sharedValue + 1);
+	}
 }
 
 
@@ -34,15 +46,16 @@ int main(int args, char* argc[])
 	
 	
 	
-	    CustomThread<void(*)()> singleThread(ExampleFunction2);
+	    /*CustomThread<void(*)()> singleThread(ExampleFunction2);
 		singleThread.StartSingleThread();
 		
 
 		CustomThread<void(*)()> multipleThreads(ExampleFunction);
-		multipleThreads.StartMultipleThreads();
+		multipleThreads.StartMultipleThreads();*/
 
-		
-
+		CustomThread<void(*)()> interlock(IncrementSharedValue);
+		interlock.StartMultipleThreads();
+		std::cout << "Final value of sharedValue: " << sharedValue << std::endl;
 
 
 	return 0;
